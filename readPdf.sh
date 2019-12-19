@@ -5,11 +5,12 @@
 
 IFS=$'\n'
 declare -a pdfs
-pdfs=($(ls /mnt/ehdd/Books/* | grep ".pdf" ))
-choice=$(printf "%s\n" "${pdfs[@]##*/}" | dmenu -l 20 -y 6 -nf "#43888E" -nb "#001F24" -fn "xos4 Terminus:style=Bold:size=18" -p "" -sf "#8ABDC7" -sb "#001F24" -i -f)
-notify-send "$choice" -i /usr/share/icons/HALODARK/apps/scalable/pdfshuffler.svg
+pdfs=($(du -a /mnt/ehdd/Books/ | grep ".pdf" | cut -f2-))
+choice=$(printf "%s\n" "${pdfs[@]##*/}" | dmenu -l 20 -nf "#4D6784" -nb "#08111C" -fn "xos4 Terminus:style=Bold:pixelsize=20" -p "" -sf "#00AAAD" -sb "#004953" -w 900 -i -f)
+notify-send "$choice" -i /usr/share/icons/candy-icons/apps/scalable/zathura.svg
 for i in "${!pdfs[@]}" ; do
     if [[ $choice == "${pdfs[$i]##*/}" ]] ; then
-	zathura "${pdfs[$i]}"
+		zathura "${pdfs[$i]}" &
+		exit 0
     fi
 done
